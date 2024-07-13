@@ -50,10 +50,18 @@ if(isset($_SESSION['id'])){
     <link rel="stylesheet" href="css/responsive.css">
     <!-- User style -->
     <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="css/my_css.css">
 
 
     <!-- Modernizr JS -->
     <script src="js/vendor/modernizr-3.5.0.min.js"></script>
+
+
+    
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 </head>
 
 <body>
@@ -72,7 +80,6 @@ if(isset($_SESSION['id'])){
                                 <nav class="main__menu__nav hidden-xs hidden-sm">
                                     <ul class="main__menu">
                                         <li class="drop"><a href="index.php">Home</a></li>
-                                       
                                         <li class="drop"><a href="#">Category</a>
                                             <ul class="dropdown">
                                              <?php foreach($cat_arr as $cat){ ?>
@@ -81,21 +88,25 @@ if(isset($_SESSION['id'])){
                                             </ul>
                                         </li>
                                         <li><a href="contact-us.php">contact</a></li>
+                                        <li class="drop"><a href="my_order.php">my orders</a></li>                                       
+
                                     </ul>
                                 </nav>
 
                                 <div class="mobile-menu clearfix visible-xs visible-sm">
                                     <nav id="mobile_dropdown">
                                         <ul>
-                                            <li><a href="index.html">Home</a></li>
+                                            <li class="drop"><a href="index.html">Home</a></li>
                                             <li class="drop"><a href="#">Category</a>
-                                            <ul class="dropdown">
-                                             <?php foreach($cat_arr as $cat){ ?>
-                                                <li><a href="categories.php?id=<?php echo $cat['id']?>"><?php echo $cat['categories']?></a></li>
-                                                <?php } ?>
-                                            </ul>
-                                        </li>
+                                                <ul class="dropdown">
+                                                    <?php foreach($cat_arr as $cat){ ?>
+                                                        <li><a href="categories.php?id=<?php echo $cat['id']?>"><?php echo $cat['categories']?></a></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </li>
                                             <li><a href="contact.php">contact</a></li>
+                                            <li class="drop"><a href="my_order.php">my orders</a></li>                                       
+
                                         </ul>
                                     </nav>
                                 </div>  

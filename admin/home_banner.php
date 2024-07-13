@@ -56,7 +56,7 @@ if(isset($_GET['type'])&& $_GET['type'] != '')
             <div class="card ">
                <div class="card-body row">
                   <div class="col-sm-6">
-                     <h2 class="box-title">Products List </h2>
+                     <h2 class="box-title">Banner Items</h2>
                   </div>
                   <div class="col-sm 6 d-flex justify-content-end">                  
                      <a href="manage_home_banner.php" type="button" class="btn btn-primary">Add Products</a>
@@ -97,10 +97,12 @@ if(isset($_GET['type'])&& $_GET['type'] != '')
                                        }
                               ?>
                               </td>
-                              <td class="text-center">
+                              <td class="d-flex justify-content-center">
                                  <?php echo "<a href='manage_home_banner.php?id=".$row['id']."' class='btn btn-primary'>Edit</a>";?>
-                                 <?php echo "<a href='?type=delete&id=".$row['id']."'  class='btn btn-danger'>Delete</a>";?>
-                              </td>
+                                 <a href="#" onclick="return confirmDelete(<?php echo $row['id']; ?>)"class='btn btn-danger'>
+                                       Delete
+                                 </a>                             
+                               </td>
                            </tr>
                            <?php } ?>
                         </tbody>

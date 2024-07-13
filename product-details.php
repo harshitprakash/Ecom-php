@@ -24,6 +24,9 @@
 
             
          }
+         else{
+            
+         }
          $error='';
          
 if(isset($_POST['add_to_cart'])) {
@@ -47,8 +50,8 @@ if(isset($_POST['add_to_cart'])) {
             else{
                 $add=mysqli_query($con,"INSERT into cart(product_id,product_name,product_price,product_qty,user_id,product_image)VALUES('$product_id','$product_name','$product_price','$product_qty','$id','$product_image')");
 
-                $error_message = "Please log in to access the product page.";
-                echo '<script>window.location.href = "cart.php"</script>';
+                $msg = "Item Added to cart";
+                echo '<script>window.location.href = "cart.php?success=item%20Added%20into%20your%20cart."</script>';
                 die();
             }
     }
@@ -74,18 +77,18 @@ if(isset($_POST['add_to_cart'])) {
         </div>
         <!-- End Offset Wrapper -->
         <!-- Start Bradcaump area -->
-        <div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(images/bg/4.jpg) no-repeat scroll center center / cover ;">
+        <div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(images/bg/head.png) no-repeat scroll center center / cover ;">
             <div class="ht__bradcaump__wrap">
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="bradcaump__inner">
                                 <nav class="bradcaump-inner">
-                                  <a class="breadcrumb-item" href="index.php">Home</a>
-                                  <span class="brd-separetor"><i class="zmdi zmdi-chevron-right"></i></span>
-                                  <a class="breadcrumb-item" href="categories.php?id=<?php echo $data[0]['categories_id']?>"><?php echo $data[0]['categories']?></a>
-                                  <span class="brd-separetor"><i class="zmdi zmdi-chevron-right"></i></span>
-                                  <span class="breadcrumb-item active"><?php echo $data[0]['name']?></span>
+                                  <a class="breadcrumb-item" href="index.php" style="color:white; font-size:25px; font-family:Ubuntu;">Home</a>
+                                  <span class="brd-separetor"><i class="zmdi zmdi-chevron-right" style="color:white; font-size:25px;"></i></span>
+                                  <a class="breadcrumb-item" href="categories.php?id=<?php echo $data[0]['categories_id']?>"style="color:white; font-size:25px; font-family:Ubuntu;"><?php echo $data[0]['categories']?></a>
+                                  <span class="brd-separetor"><i class="zmdi zmdi-chevron-right"style="color:white; font-size:25px;"></i></span>
+                                  <span class="breadcrumb-item active"style="color:white; font-size:25px; font-family:Ubuntu;"><?php echo $data[0]['name']?></span>
                                 </nav>
                             </div>
                         </div>

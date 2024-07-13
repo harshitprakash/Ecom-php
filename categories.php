@@ -1,9 +1,13 @@
 <?php 
     require('top.php');
+    $error='';
 
     if (isset($_GET['id'])) {
         $cat_id = mysqli_real_escape_string($con, $_GET['id']);
         $get_product=get_product($con,'','',$cat_id);
+        $sql="SELECT * FROM categories where id=$cat_id AND status =1";
+        $res = mysqli_query($con, $sql);
+        $row=mysqli_fetch_assoc($res);
     } else {
         echo "Category ID is not set or invalid."; // Handle case where category ID is not provided
     }
@@ -13,16 +17,16 @@
 <div class="body__overlay"></div>
         
         <!-- Start Bradcaump area -->
-        <div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(images/bg/4.jpg) no-repeat scroll center center / cover ;">
+        <div class="ht__bradcaump__area" style="background: rgba(0, 0, 0, 0) url(images/bg/head.png) no-repeat scroll center center / cover ;">
             <div class="ht__bradcaump__wrap">
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="bradcaump__inner">
                                 <nav class="bradcaump-inner">
-                                  <a class="breadcrumb-item" href="index.html">Home</a>
-                                  <span class="brd-separetor"><i class="zmdi zmdi-chevron-right"></i></span>
-                                  <span class="breadcrumb-item active"><?php echo $get_product[0]['categories']?></span>
+                                  <a class="breadcrumb-item" href="index.html" style="color:white; font-size:25px; font-family:Old Standard TT">Home</a>
+                                  <span class="brd-separetor"><i class="zmdi zmdi-chevron-right" style="color:white; font-size:25px;"></i></span>
+                                  <span class="breadcrumb-item active" style="color:white; font-size:25px; font-family:Ubuntu;"><?php echo $row['categories']?></span>
                                 </nav>
                             </div>
                         </div>
@@ -39,27 +43,33 @@
                         <div class="htc__product__rightidebar">
                            
                             <!-- Start Product View -->
+
                             <div class="row">
                                 <div class="shop__grid__view__wrap">
+                                    <div class="col-lg-12 text-center text-danger">
+                                        <h3 style="font-family:monospace;">Fashion <?php echo $row['categories']?></h3>
+                                    </div>
                                     <div role="tabpanel" id="grid-view" class="single-grid-view tab-pane fade in active clearfix">
                                         <!-- Start Single Product -->
-                                         <?php foreach($get_product as $list){ ?>
-                                        <div class="col-lg-4 col-12">
+                                         <?php
+                                         if(empty($get_product)){
+                                            echo '<div style="color: red; font-size: 20px; text-align:center;">';
+                                            echo "SORRY CATEGORY IS EMPTY. Click here for";echo '<a href="index.php"> Continue Shopping</a>';
+                                            echo '</div>';
+                                         } 
+                                         else{
+                                           
+                                         
+                                         foreach($get_product as $list){ ?>
+                                        <div class="col-md-4 col-lg-3 col-sm-6 col-xs-6">
                                             <div class="category">
-                                                <div class="ht__cat__thumb">
+                                                
+                                                <div class="image-container">
                                                     <a href="product-details.php?id=<?php echo $list['id']?>">
-                                                        <img src="<?php echo PRODUCT_IMAGE_SITE_PATH.$list['image']?>" alt="product images" style="height:400px;">
+                                                        <img src="<?php echo PRODUCT_IMAGE_SITE_PATH.$list['image']?>" alt="product images"class="resized-image" >
                                                     </a>
                                                 </div>
-                                                <div class="fr__hover__info">
-                                                    <ul class="product__action">
-                                                        <li><a href="wishlist.html"><i class="icon-heart icons"></i></a></li>
-
-                                                        <li><a href="cart.html"><i class="icon-handbag icons"></i></a></li>
-
-                                                        <li><a href="#"><i class="icon-shuffle icons"></i></a></li>
-                                                    </ul>
-                                                </div>
+                                                
                                                 <div class="fr__product__inner">
                                                     <h4><a href="product-details.php?id=<?php echo $list['id']?>"><?php echo $list['name']?></a></h4>
                                                     <ul class="fr__pro__prize">
@@ -69,7 +79,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <?php }?>
+                                        <?php }}?>
                                         <!-- End Single Product -->
                                     
                                     </div>

@@ -76,7 +76,9 @@
                               </td>
                               <td class="text-center">
                                  <?php echo "<a href='manage_category.php?id=".$row['id']."' class='btn btn-primary'>Edit</a>";?>
-                                 <?php echo "<a href='?type=delete&id=".$row['id']."'  class='btn btn-danger'>Delete</a>";?>
+                                 <a href="#" onclick="return confirmDelete(<?php echo $row['id']; ?>)"class='btn btn-danger'>
+                                       Delete
+                                 </a>
                               </td>
                            </tr>
                            <?php } ?>
@@ -89,7 +91,7 @@
       </div>
    </div>
  </div>
-
+ 
 <?php
 require('footer.inc.php');
 ?>

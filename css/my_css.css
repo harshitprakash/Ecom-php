@@ -1,0 +1,18 @@
+.image-container {
+  max-width: 100%; /* Ensure container adjusts to screen size */
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.resized-image {
+  max-width: 100%; /* Image fills container width */
+  height: 300px; /* Fixed height for all images */
+  object-fit: cover;
+  display: block; /* Remove any default spacing */
+}
+.resized-imagee {
+  max-width: 100%; /* Image fills container width */
+  height: 500px; /* Fixed height for all images */
+  object-fit: cover;
+  display: block; /* Remove any default spacing */
+}

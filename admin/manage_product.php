@@ -92,6 +92,21 @@
             if(isset($_GET['id']) && $_GET['id'] != '')
             {
                if ($_FILES['image']['name'] != '') {
+
+                  $id = get_safe_value($con,$_GET['id']);
+                  $select_sql = "SELECT * FROM home_banner WHERE id='$id'";
+                  $result = mysqli_query($con, $select_sql);
+                  $row = mysqli_fetch_assoc($result);
+                  $image_filename = $row['image'];
+                 if($image_filename == ''){
+                     header('Location:home_banner.php');
+                 }else{
+                     $image_path = HOME_BANNER_IMAGE_SERVER_PATH . $image_filename;
+                     if (file_exists($image_path)) {
+                        unlink($image_path); // This deletes the file
+                        }
+                 }
+
                   $image = rand(111111111, 999999999) . '_' . $_FILES['image']['name'];
                   move_uploaded_file($_FILES['image']['tmp_name'],PRODUCT_IMAGE_SERVER_PATH. $image);
                   $update_sql = "UPDATE product SET categories_id='$categories_id', name='$name', mrp='$mrp', price='$price', qty='$qty', short_desc='$short_desc', description='$description', meta_title='$meta_title', meta_desc='$meta_desc', meta_keyword='$meta_keyword', image='$image' WHERE id='$id'";

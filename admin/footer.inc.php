@@ -12,6 +12,17 @@
             </div>
          </footer>
       </div>
+      <script>
+        function confirmDelete(id) {
+            if (confirm("Are you sure you want to delete this item?")) {
+                // Redirect to the deletion URL or perform deletion action
+                window.location.href = '?type=delete&id=' + id;
+                return true; // Continue with the link action
+            } else {
+                return false; // Cancel the link action
+            }
+        }
+    </script>
       <script src="assets/js/vendor/jquery-2.1.4.min.js" type="text/javascript"></script>
       <script src="assets/js/popper.min.js" type="text/javascript"></script>
       <script src="assets/js/plugins.js" type="text/javascript"></script>

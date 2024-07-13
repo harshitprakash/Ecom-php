@@ -38,7 +38,7 @@ require('function.inc.php');
                      <a href="#" > Order Master</a>
                   </li>
                   <li class="menu-item-has-children dropdown">
-                     <a href="#" > User Master</a>
+                     <a href="user.php" > User Master</a>
                   </li>
                   <li class="menu-item-has-children dropdown">
                      <a href="home_banner.php" >Home Banner</a>

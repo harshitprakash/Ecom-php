@@ -27,7 +27,7 @@
                         </div>
                         <!-- End Single Footer Widget -->
                         <!-- Start Single Footer Widget -->
-                        <div class="col-md-2 col-sm-6 col-xs-12 xmt-40">
+                        <div class="col-md-3 col-sm-6 col-xs-12 xmt-40">
                             <div class="footer">
                                 <h2 class="title__line--2">information</h2>
                                 <div class="ft__inner">
@@ -36,44 +36,29 @@
                                         <li><a href="#">Delivery Information</a></li>
                                         <li><a href="#">Privacy & Policy</a></li>
                                         <li><a href="#">Terms  & Condition</a></li>
-                                        <li><a href="#">Manufactures</a></li>
+                                        <li><a href="contact-us.php">Contact Us</a></li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <!-- End Single Footer Widget -->
                         <!-- Start Single Footer Widget -->
-                        <div class="col-md-2 col-sm-6 col-xs-12 xmt-40 smt-40">
+                        <div class="col-md-3 col-sm-6 col-xs-12 xmt-40 smt-40">
                             <div class="footer">
                                 <h2 class="title__line--2">my account</h2>
                                 <div class="ft__inner">
                                     <ul class="ft__list">
                                         <li><a href="#">My Account</a></li>
-                                        <li><a href="cart.html">My Cart</a></li>
+                                        <li><a href="cart.php">My Cart</a></li>
                                         <li><a href="#">Login</a></li>
-                                        <li><a href="wishlist.html">Wishlist</a></li>
-                                        <li><a href="checkout.html">Checkout</a></li>
+                                        <li><a href="">Category</a></li>
+                                        <li><a href="checkout.php">Checkout</a></li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <!-- End Single Footer Widget -->
-                        <!-- Start Single Footer Widget -->
-                        <div class="col-md-2 col-sm-6 col-xs-12 xmt-40 smt-40">
-                            <div class="footer">
-                                <h2 class="title__line--2">Our service</h2>
-                                <div class="ft__inner">
-                                    <ul class="ft__list">
-                                        <li><a href="#">My Account</a></li>
-                                        <li><a href="cart.html">My Cart</a></li>
-                                        <li><a href="#">Login</a></li>
-                                        <li><a href="wishlist.html">Wishlist</a></li>
-                                        <li><a href="checkout.html">Checkout</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Single Footer Widget -->
+                        
                         <!-- Start Single Footer Widget -->
                         <div class="col-md-3 col-sm-6 col-xs-12 xmt-40 smt-40">
                             <div class="footer">
@@ -100,7 +85,7 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="copyright__inner">
-                                <p>Copyright© <a href="https://freethemescloud.com/">Free themes Cloud</a> 2018. All right reserved.</p>
+                                <p>Copyright© <a href="https://freethemescloud.com/">Future Fashion</a><time datetime="2024"> 2024</time>.</p>
                                 <a href="#"><img src="images/others/shape/paypol.png" alt="payment images"></a>
                             </div>
                         </div>
@@ -113,6 +98,17 @@
          <!-- Placed js at the end of the document so the pages load faster -->
 
     <!-- jquery latest version -->
+    <script>
+        function confirmDelete(id) {
+            if (confirm("Are you sure you want to delete this item?")) {
+                // Redirect to the deletion URL or perform deletion action
+                window.location.href = '?type=delete&id=' + id;
+                return true; // Continue with the link action
+            } else {
+                return false; // Cancel the link action
+            }
+        }
+    </script>
     <script src="js/vendor/jquery-3.2.1.min.js"></script>
     <!-- Bootstrap framework js -->
     <script src="js/bootstrap.min.js"></script>
