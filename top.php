@@ -61,7 +61,6 @@ if(isset($_SESSION['id'])){
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
 </head>
 
 <body>
@@ -88,8 +87,9 @@ if(isset($_SESSION['id'])){
                                             </ul>
                                         </li>
                                         <li><a href="contact-us.php">contact</a></li>
-                                        <li class="drop"><a href="my_order.php">my orders</a></li>                                       
-
+                                        <?php if(!empty($admin_login)){?>
+                                            <li class="drop"><a href="my_order.php">my orders</a></li>
+                                        <?php }?>
                                     </ul>
                                 </nav>
 
@@ -105,7 +105,9 @@ if(isset($_SESSION['id'])){
                                                 </ul>
                                             </li>
                                             <li><a href="contact.php">contact</a></li>
-                                            <li class="drop"><a href="my_order.php">my orders</a></li>                                       
+                                            <?php if(!empty($admin_login)){?>
+                                                <li class="drop"><a href="my_order.php">my orders</a></li>
+                                            <?php }?>
 
                                         </ul>
                                     </nav>

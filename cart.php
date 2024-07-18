@@ -89,7 +89,7 @@
                                                 </ul>
                                             </td>
                                             <td class="product-price"><span class="amount"><?php echo $row['product_price']?></span></td>
-                                            <td class="product-quantity"><input type="number" value="<?php echo $row['product_qty'] ?>" /></td>
+                                            <td class="product-price"><span class="amount"><?php echo $row['product_qty']?></span></td>    
                                             <td class="product-subtotal"><?php echo $amount =$row['product_price']*$row['product_qty'];$total+=$amount;?></td>
                                             <td class="product-remove">
                                                 <a href="#" onclick="return confirmDelete(<?php echo $row['id']; ?>)">
@@ -117,7 +117,7 @@
                                             <a href="index.php">Continue Shopping</a>
                                         </div>
                                         <div class="buttons-cart checkout--btn">
-                                            <a href="#">update</a>
+                                            <a href="#">update Quantity</a>
                                             <a href="checkout.php">checkout</a>
                                         </div>
                                     </div>

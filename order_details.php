@@ -42,30 +42,50 @@
                                         <thead>
                                             <tr>
                                                 <th class="product-name"><span class="nobr">Order ID</span></th>
-                                                <th class="product-price"><span class="nobr">Payment Type</span></th>
-                                                <th class="product-stock-stauts"><span class="nobr"> order status</span></th>
-                                                <th class="product-add-to-cart"><span class="nobr">Payment status </span></th>
-                                                <th class="product-add-to-cart"><span class="nobr">Address </span></th>
-                                                <th class="product-add-to-cart"><span class="nobr">Order Date</span></th>
-                                                <th class="product-add-to-cart"><span class="nobr">view Items</span></th>
+                                                <th class="product-add-to-cart"><span class="nobr">QTY</span></th>
+                                                <th class="product-add-to-cart"><span class="nobr">price of Product </span></th>
+                                                <th class="product-add-to-cart"><span class="nobr">Total price of product</span></th>
+                                                <th class="product-price"><span class="nobr">Product</span></th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php
-                                            $sql="SELECT * FROM `order_details` where order_id=$id";
+                                            $uid=$_SESSION['id'];
+                                            $sql="SELECT 
+                                                order_details.*, 
+                                                product.name, 
+                                                product.image 
+                                            FROM 
+                                                order_details
+                                            JOIN 
+                                                `order` ON order_details.order_id = `order`.id
+                                            JOIN 
+                                                product ON order_details.product_id = product.id
+                                            WHERE 
+                                                order_details.order_id = $id
+                                                AND `order`.user_id = $uid;";
                                             $req=mysqli_query($con,$sql);
+                                            $total_price=0;
                                             while($data=mysqli_fetch_assoc($req)){
+                                                $price=$data['qty']*$data['price'];
                                             ?>
                                             <tr>
                                                 <td class="product-name"><a href="#"><?php echo $data['id']?></a></td>
-                                                <td class="product-stock-status"><span class="wishlist-in-stock"><?php echo $data['payment_type']?></span></td>
-                                                <td class="product-stock-status"><span class="wishlist-in-stock"><?php echo $data['payment_status']?></span></td>
-                                                <td class="product-stock-status"><span class="wishlist-in-stock"><?php echo $data['order_status']?></span></td>
-                                                <td class="product-stock-status"><span class="wishlist-in-stock"><?php echo $data['address']?></span></td>
-                                                <td class="product-price"><span class="amount"><?php echo $data['added_on']?></span></td>
-                                                <td class=""><a class="btn btn-info" href="product_details.php?id=<?php echo $data['id']?>">View Item</a></td>
+                                                <td class="product-stock-status"><span class="wishlist-in-stock"><?php echo $data['qty']?></span></td>
+                                                <td class="product-stock-status"><span class="wishlist-in-stock"><?php echo $data['price']?></span></td>
+                                                <td class="product-price"><span class="amount"><?php echo $price;$total_price+=$price;?></span></td>
+                                                <td class="product-name"><span class="wishlist-in-stock"><img src="<?php echo PRODUCT_IMAGE_SITE_PATH.$data['image']?>" alt="full-image" style=""><h4><span class="amount"><?php echo $data['name']?></span></h4>
+                                                </span></td>
+
                                             </tr>
                                             <?php }?>
+                                            <td class="product-price"></td>
+                                            <td class="product-price"></td>
+                                            <td class="product-price"><span class="amount">Total</span></td>
+                                            <td class="product-price"><span class="amount"><?php echo $total_price?></span></td>
+                                            <td class="product-price"></td>
+
                                         </tbody>
                                        
                                     </table>
