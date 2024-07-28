@@ -1,70 +1,78 @@
 <?php 
     require ('top.php');
-     
-    if(isset($_GET['id'])){
-        $product_id=mysqli_real_escape_string($con,$_GET['id']);
-        $sql = "SELECT product.*, categories.categories 
-        FROM product
-        JOIN categories ON product.categories_id = categories.id
-        WHERE product.status = 1 AND product.id = $product_id";
-            $res = mysqli_query($con, $sql);
-            $data = array();
-            while ($row = mysqli_fetch_assoc($res)) {
-                $data[] = $row;
-            }
-             
-
-            $id=$data[0]['categories_id'];
-            $sql2="SELECT * from product where categories_id=$id AND status=1 ORDER BY id DESC LIMIT 4";
-            $res2=mysqli_query($con,$sql2);
-            $data2=array();
-            while ($row = mysqli_fetch_assoc($res2)) {
-                $data2[] = $row;
-            }
-
-            
-         }
-         else{
-            
-         }
-         $error='';
-         
-if(isset($_POST['add_to_cart'])) {
-    $product_image=get_safe_value($con,$_POST['product_image']);
-    $product_id=get_safe_value($con,$_POST['product_id']);
-    $product_name=get_safe_value($con,$_POST['product_name']);
-    $product_price=get_safe_value($con,$_POST['product_price']);
-    $product_qty=get_safe_value($con,$_POST['qty']);
     
-    if(isset($_SESSION['id'])){
-        $id=$_SESSION['id'];
+    try {
 
-                $sql="SELECT * FROM cart WHERE product_id='$product_id' and user_id=$id";
-            $res=mysqli_query($con,$sql);
-            $check=mysqli_num_rows($res);
-            
-            if($check>0)
-            {
-            $error="Product exist in cart";
-            }
-            else{
-                $add=mysqli_query($con,"INSERT into cart(product_id,product_name,product_price,product_qty,user_id,product_image)VALUES('$product_id','$product_name','$product_price','$product_qty','$id','$product_image')");
 
-                $msg = "Item Added to cart";
-                echo '<script>window.location.href = "cart.php?success=item%20Added%20into%20your%20cart."</script>';
-                die();
-            }
-    }
-    else{
+        if(isset($_GET['id'])){
+            $product_id=mysqli_real_escape_string($con,$_GET['id']);
+            $sql = "SELECT product.*, categories.categories 
+            FROM product
+            JOIN categories ON product.categories_id = categories.id
+            WHERE product.status = 1 AND product.id = $product_id";
+                $res = mysqli_query($con, $sql);
+                $data = array();
+                while ($row = mysqli_fetch_assoc($res)) {
+                    $data[] = $row;
+                }
+                $id=$data[0]['categories_id'];
+                $sql2="SELECT * from product where categories_id=$id AND status=1 ORDER BY id DESC LIMIT 4";
+                $res2=mysqli_query($con,$sql2);
+                $data2=array();
+                while ($row = mysqli_fetch_assoc($res2)) {
+                    $data2[] = $row;
+                }
+                   
+             }
+             $error='';
+             
+    if(isset($_POST['add_to_cart'])) {
+        $product_image=get_safe_value($con,$_POST['product_image']);
+        $product_id=get_safe_value($con,$_POST['product_id']);
+        $product_name=get_safe_value($con,$_POST['product_name']);
+        $product_price=get_safe_value($con,$_POST['product_price']);
+        $product_qty=get_safe_value($con,$_POST['qty']);
         
-        $error="Please login first for adding product into cart. ";
-        echo '<script>window.location.href = "login.php?error=Please%20Login,%20Before%20Adding%20items%20into%20cart.";</script>';
-        die();
-
+        if(isset($_SESSION['id'])){
+            $id=$_SESSION['id'];
+    
+                $sql="SELECT * FROM cart WHERE product_id='$product_id' and user_id=$id";
+                $res=mysqli_query($con,$sql);
+                $check=mysqli_num_rows($res);
+                
+                if($check>0)
+                {
+                $error="Product exist in cart";
+                }
+                else{
+                    $add=mysqli_query($con,"INSERT into cart(product_id,product_name,product_price,product_qty,user_id,product_image)VALUES('$product_id','$product_name','$product_price','$product_qty','$id','$product_image')");
+    
+                    $msg = "Item Added to cart";
+                    echo '<script>window.location.href = "cart.php?success=item%20Added%20into%20your%20cart."</script>';
+                    die();
+                }
+        }
+        else{
+            
+            $error="Please login first for adding product into cart. ";
+            echo '<script>window.location.href = "login.php?error=Please%20Login,%20Before%20Adding%20items%20into%20cart.";</script>';
+            die();
+    
+        }
+       
+    
     }
-   
-
+    // Code that may throw an exception
+} catch (Exception $e) {
+    // Log the error details for debugging
+    error_log($e->getMessage());
+    
+    // Show a user-friendly message
+    echo "An error occurred. Please try again later.";
 }
+
+
+ 
         
    
 

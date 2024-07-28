@@ -59,7 +59,7 @@ if(isset($_GET['type'])&& $_GET['type'] != '')
                      <h2 class="box-title">Banner Items</h2>
                   </div>
                   <div class="col-sm 6 d-flex justify-content-end">                  
-                     <a href="manage_home_banner.php" type="button" class="btn btn-primary">Add Products</a>
+                     <a href="manage_home_banner.php" type="button" class="btn btn-primary">Add Banners</a>
                   </div>
                </div>
                <div class="card-body--">
@@ -72,7 +72,6 @@ if(isset($_GET['type'])&& $_GET['type'] != '')
                               <th class="text-center">Sub_title</th>
                               <th class="text-center">Product Link</th>
                               <th class="text-center">Image</th>
-                              <th class="text-center">Status</th>
                               <th class="text-center">Action</th>
                            </tr>
                         </thead>
@@ -84,25 +83,20 @@ if(isset($_GET['type'])&& $_GET['type'] != '')
                               <td class="text-center"><?php echo $row['sub_title']?></td>
                               <td class="text-center"><?php echo $row['image_url']?></td>
                               <td class="text-center"><img src="<?php echo HOME_BANNER_IMAGE_SITE_PATH.$row['image']?>"></td>
-                              <td class="text-center">
                               
-                              <?php
-                                    if($row['status'] == 1)
-                                       {
-                                          echo "<a href='?type=status&operation=deactive&id=".$row['id']."' class='btn btn-success'>Active</a>&nbsp;";
-                                       } 
-                                    else
-                                       {
-                                          echo "<a href='?type=status&operation=active&id=".$row['id']."' class='btn btn-warning'>Deactive</a>&nbsp;";
-                                       }
-                              ?>
+                              <td class="text-center">
+                                 <div class="btn-group" role="group" aria-label="Button group">
+                                    <?php if ($row['status'] == 1): ?>
+                                          <a href='?type=status&operation=deactive&id=<?php echo $row['id']; ?>' class='btn btn-success mr-1'>Active</a>
+                                    <?php else: ?>
+                                          <a href='?type=status&operation=active&id=<?php echo $row['id']; ?>' class='btn btn-warning mr-1'>Deactive</a>
+                                    <?php endif; ?>
+                                    <a href='manage_home_banner.php?id=<?php echo $row['id']; ?>' class='btn btn-primary mr-1'>Edit</a>
+                                    <a href='#' onclick='return confirmDelete(<?php echo $row['id']; ?>)' class='btn btn-danger'>Delete</a>
+                                 </div>
                               </td>
-                              <td class="d-flex justify-content-center">
-                                 <?php echo "<a href='manage_home_banner.php?id=".$row['id']."' class='btn btn-primary'>Edit</a>";?>
-                                 <a href="#" onclick="return confirmDelete(<?php echo $row['id']; ?>)"class='btn btn-danger'>
-                                       Delete
-                                 </a>                             
-                               </td>
+
+
                            </tr>
                            <?php } ?>
                         </tbody>

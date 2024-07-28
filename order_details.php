@@ -63,7 +63,7 @@
                                             JOIN 
                                                 product ON order_details.product_id = product.id
                                             WHERE 
-                                                order_details.order_id = $id
+                                                order_details.order_id =$id
                                                 AND `order`.user_id = $uid;";
                                             $req=mysqli_query($con,$sql);
                                             $total_price=0;

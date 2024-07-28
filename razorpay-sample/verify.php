@@ -42,40 +42,8 @@ if ($success) {
     // You can access payment details like $payment->amount, $payment->status, etc.
     $amount_paid = $payment->amount / 100; // Convert amount from paise to rupees
 
-
     echo "Payment Successful! Amount: $amount_paid INR";
-
-    $_SESSION['payment_status']='success';
-    $_SESSION['user_id'];
-    $_SESSION['address'];
-    $_SESSION['city'];
-    $_SESSION['pincode'];
-    $_SESSION['payment_type'];
-    $_SESSION['price'];
-
-
-    $order_status= 'pending';
-    $added_on=date('y-m-d h:i:s');
-
-    if($payment_type == 'cod' || $payment_status == 'success' ){
-        mysqli_query($con,"INSERT INTO `order` (user_id, address, city, pincode, payment_type, total_price, payment_status, order_status, added_on)
-        VALUES ('$user_id', '$address', '$city', '$pincode', '$payment_type', '$total_price', '$payment_status', '$order_status', '$added_on')");
-
-        $order_id=mysqli_insert_id($con);
-
-        foreach($data as $item){
-            $product_id =$item['product_id'];
-            $qty =$item['product_qty'];
-            $price =$item['product_price'];
-
-            mysqli_query($con,"INSERT INTO `order_details` (order_id, product_id, qty, price)
-            VALUES ('$order_id', '$product_id', '$qty', '$price')");
-        }
-        $delete_sql = "DELETE FROM cart WHERE user_id = $id";
-        mysqli_query($con,$delete_sql);
-
-        // echo '<script>window.location.href = "thanku.php";</script>';
-    }
+    
 
 } else {
     // Payment failed, handle accordingly

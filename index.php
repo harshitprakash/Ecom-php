@@ -1,5 +1,39 @@
-<?php include "top.php";
+<?php 
 
+include "top.php";
+
+if(isset($_POST['filter'])){
+
+    $sort=get_safe_value($con,$_POST['short']);
+
+    if ($sort === 'High_to_low') {
+        $orderBy = 'ORDER BY price DESC';
+    }
+    if ($sort === 'Low_to_high') {
+        $orderBy = 'ORDER BY price ASC';
+    }
+    if ($sort === 'default') {
+        echo '<script>window.location.href = "index.php"</script>';
+    }
+    if($sort=="High_to_low" || $sort=="Low_to_high"){
+        $sql = "SELECT * FROM product WHERE status =1 $orderBy";
+        $req=mysqli_query($con,$sql);
+        $product = array();
+            while($row=mysqli_fetch_assoc($req)){
+            $product[]=$row;
+            }
+    }
+    
+
+}else{
+        $sql="SELECT * FROM product Where status = 1";
+        $req=mysqli_query($con,$sql);
+        $product = array();
+        while($row=mysqli_fetch_assoc($req)){
+        $product[]=$row;
+        }
+
+}
 $sql="SELECT * FROM home_banner Where status = 1";
 $req=mysqli_query($con,$sql);
 $datas = array();
@@ -7,12 +41,6 @@ while($row=mysqli_fetch_assoc($req)){
   $datas[]=$row;
 }
 
-$sql="SELECT * FROM product Where status = 1";
-$req=mysqli_query($con,$sql);
-$product = array();
-while($row=mysqli_fetch_assoc($req)){
-  $product[]=$row;
-}
 ?>
 <div class="body__overlay"></div>
         <!-- Start Offset Wrapper -->
@@ -73,10 +101,10 @@ while($row=mysqli_fetch_assoc($req)){
         <div class="slider__container slider--one bg__cat--3">
             <div class="slide__container slider__activation__wrap owl-carousel">
                 <!-- Start Single Slide -->
-                 <?php
+                <?php
                     foreach($datas as $data){
 
-                 ?>
+                ?>
                 <div class="single__slide animation__style01 slider__fixed--height">
                     <div class="container">
                         <div class="row align-items__center">
@@ -148,18 +176,41 @@ while($row=mysqli_fetch_assoc($req)){
             </div>
         </section>
         <!-- End Category Area -->
-          <!-- Start Category Area -->
+        <!-- Start Category Area -->
+         
         <section class="htc__category__area ptb--100">
             <div class="container">
                 <div class="row">
-                    <div class="col-xs-12">
+                    <div class="col-xs-8">
                         <div class="section__title--2">
                             <h2 class="title__line" >All products</h2>
                             <p>But I must explain to you how all this mistaken idea</p>
                         </div>
                     </div>
+                    <div class="col-xs-4">
+                            <div class="section__title--2">
+                                <form action="" method="POST">
+                                    <div class="htc__select__option">
+                                        <select name="short"class="ht__select" style="margin-top:20px;">
+                                            <?php 
+                                            
+                                            if(isset($_POST['filter'])){?>
+                                                <option value="" >SELECTED: Short by price <?php echo $sort ?></option>
+                                            <?php }?>
+                                            <option value="default" >Default</option>
+                                            <option value="High_to_low">Sort by price High to Low</option>
+                                            <option value="Low_to_high">Sort by price Low to High</option>
+                                        </select>
+                                        <button type="submit"class="btn btn-danger" name="filter" style="margin-top:20px;"><i class="fa fa-filter"></i></button>
+                                    </div>
+                                </form>
+
+                            </div>
+                    </div>
+                    
                 </div>
-                <div class="htc__product__container">
+                
+                <div class="htc__product__container" style="max-height: 900px; overflow-y: auto;">
                     <div class="row">
                         <div class="product__list clearfix mt--30">
                             <?php

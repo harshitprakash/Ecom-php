@@ -25,7 +25,7 @@
                     echo '<script>window.location.href = "checkout.php";</script>';
                 }
             }
-            }
+        }
         else{
             echo '<script>window.location.href = "cart.php";</script>';
         }
@@ -36,7 +36,6 @@
         $total_price=0;
         foreach($data as $list){
             $price=$list['product_price']*$list['product_qty'];$total_price+=$price;
-            $_SESSION['price']=$price;
         }
         if(isset($_POST['submit'])){
             $user_id=get_safe_value($con,$_SESSION['id']);
@@ -46,17 +45,48 @@
             $payment_type=get_safe_value($con,$_POST['payment_type']);
             $payment_status = 'pending';
 
-            $_SESSION['user_id']=$user_id;
-            $_SESSION['address']=$address;
-            $_SESSION['city']=$city;
-            $_SESSION['pincode']=$pincode;
-            $_SESSION['payment_type']=$payment_type;
-
+            if($payment_type == 'upi'){
+                $_SESSION['user_id']=$user_id;
+                $_SESSION['address']=$address;
+                $_SESSION['city']=$city;
+                $_SESSION['pincode']=$pincode;
+                $_SESSION['payment_type']=$payment_type;
+                $_SESSION['price']=$price;
+            }
             if($payment_type == 'cod'){
-                    $payment_status = 'success';
+                    $payment_status = 'pending';
             }
             $order_status= 'pending';
             $added_on=date('y-m-d h:i:s');
+
+        
+            if($payment_type == 'cod'){
+                    mysqli_query($con,"INSERT INTO `order` (user_id, address, city, pincode, payment_type, total_price, payment_status, order_status, added_on)
+                    VALUES ('$user_id', '$address', '$city', '$pincode', '$payment_type', '$price', '$payment_status', '$order_status', '$added_on')");
+        
+                $order_id=mysqli_insert_id($con);
+        
+                $sql="SELECT * from cart where user_id=$id";
+                    $res=mysqli_query($con,$sql);
+                    $data=array();
+                    while($row=mysqli_fetch_assoc($res)){
+                        $data[]=$row;
+                    }
+        
+                foreach($data as $item){
+                    $product_id =$item['product_id'];
+                    $qty =$item['product_qty'];
+                    $price =$item['product_price'];
+        
+                    mysqli_query($con,"INSERT INTO `order_details` (order_id, product_id, qty, price)
+                    VALUES ('$order_id', '$product_id', '$qty', '$price')");
+                }
+                $delete_sql = "DELETE FROM cart WHERE user_id = $id";
+                mysqli_query($con,$delete_sql);
+        
+                echo '<script>window.location.href = "thanku.php";</script>';
+            }
+
 
             if($payment_type == 'upi'){
                 
@@ -75,7 +105,7 @@
                 $order_id = $order->id;
 
                 // Set your callback URL
-                $callback_url = "http://localhost/php-project/razorpay-sample/success.html";
+                $callback_url = "http://localhost/php-project/razorpay-sample/success.php?id=" . $_SESSION['user_id'];
 
                 // Include Razorpay Checkout.js library
                 echo '<script src="https://checkout.razorpay.com/v1/checkout.js"></script>';
@@ -105,11 +135,11 @@
                     }
                 </script>';
             }
-            if(isset($_SESSION['payment_status'])){
+            // if(isset($_SESSION['payment_status'])){
               
-                $payment_status=$_SESSION['payment_status'];
-                unset($_SESSION['payment_status']);
-            }
+            //     $payment_status=$_SESSION['payment_status'];
+            //     unset($_SESSION['payment_status']);
+            // }
         
            
         }
@@ -135,17 +165,17 @@
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="single-input">
-                                                                <input type="text" name="address" placeholder="Address ">
+                                                                <input type="text" name="address" placeholder="Address" required>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="single-input">
-                                                                <input type="text" name="city" placeholder="City/State">
+                                                                <input type="text" name="city" placeholder="City/State"  required>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="single-input">
-                                                                <input type="number" name="pincode" placeholder="Post code/ zip">
+                                                                <input type="number" name="pincode" placeholder="Post code/ zip"  required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -157,17 +187,18 @@
                                         <div class="accordion__body">
                                             <div class="paymentinfo">
                                             <label>
-                                                <input type="radio" name="payment_type" value="cod">
+                                                <input type="radio" name="payment_type" value="cod"  required>
                                                 COD
                                             </label><br>
                                             <label>
-                                                <input type="radio" name="payment_type" value="upi">
+                                                <input type="radio" name="payment_type" value="upi"  required>
                                                 UPI
                                             </label><br>
-                                                <input type="submit" name="submit" value="Submit">
-
                                             </div>
+                                            <button class="btn btn-danger" name="submit">Submit</button>
                                         </div>
+                                    
+
                                     </form>
 
                                 </div>

@@ -1979,7 +1979,7 @@ header .form-inline .search-form.close {
 .table-stats table th img,
 .table-stats table td img {
     margin-right: 10px;
-    max-width: 45px
+    max-width: 100px;
 }
 
 .table-stats table th .name,
