@@ -42,15 +42,17 @@ if ($success) {
     // You can access payment details like $payment->amount, $payment->status, etc.
     $amount_paid = $payment->amount / 100; // Convert amount from paise to rupees
 
-    $_SESSION['payment_status']='success';
 
     echo "Payment Successful! Amount: $amount_paid INR";
 
+    $_SESSION['payment_status']='success';
     $_SESSION['user_id'];
     $_SESSION['address'];
     $_SESSION['city'];
     $_SESSION['pincode'];
     $_SESSION['payment_type'];
+    $_SESSION['price'];
+
 
     $order_status= 'pending';
     $added_on=date('y-m-d h:i:s');

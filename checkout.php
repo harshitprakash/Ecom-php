@@ -36,6 +36,7 @@
         $total_price=0;
         foreach($data as $list){
             $price=$list['product_price']*$list['product_qty'];$total_price+=$price;
+            $_SESSION['price']=$price;
         }
         if(isset($_POST['submit'])){
             $user_id=get_safe_value($con,$_SESSION['id']);
