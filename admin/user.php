@@ -3,32 +3,61 @@
     require('admin_auth.php');
 
     auth();
+    $text='';
     $start=0;
     $rows_per_page=10;
     $record ="SELECT * FROM admin_users WHERE role ='user'";
     $result = $con->query($record);
-    if ($result->num_rows > 0) {
-       // Output number of rows
-       $nr_of_rows = $result->num_rows;
+
+    if(isset($_POST['search'])){
+      $text=get_safe_value($con,$_POST['text']);
+
+      $search_text = '%' . $text . '%';
+      if ($result->num_rows > 0) {
+         // Output number of rows
+         $nr_of_rows = $result->num_rows;
+     }
+      $pages=ceil($nr_of_rows/$rows_per_page);
+      if(isset($_GET['page-nr'])){
+         $page=$_GET['page-nr']-1;
+         $start = $page*$rows_per_page;
+      }
+      $sql = "SELECT * FROM admin_users WHERE email LIKE '$search_text' LIMIT $start,$rows_per_page";
+      $res=mysqli_query($con,$sql);
    }
-    $pages=ceil($nr_of_rows/$rows_per_page);
-    if(isset($_GET['page-nr'])){
-       $page=$_GET['page-nr']-1;
-       $start = $page*$rows_per_page;
-    }
-    $sql="SELECT * FROM admin_users WHERE role ='user' LIMIT $start,$rows_per_page";
-    $res=mysqli_query($con,$sql); 
+else{
+   if ($result->num_rows > 0) {
+      // Output number of rows
+      $nr_of_rows = $result->num_rows;
+  }
+   $pages=ceil($nr_of_rows/$rows_per_page);
+   if(isset($_GET['page-nr'])){
+      $page=$_GET['page-nr']-1;
+      $start = $page*$rows_per_page;
+   }
+   $sql="SELECT * FROM admin_users WHERE role ='user' LIMIT $start,$rows_per_page";
+   $res=mysqli_query($con,$sql); 
+}
+   
 ?>
 <div class="content pb-0">
    <div class="orders">
       <div class="row">
          <div class="col-xl-12">
             <div class="card ">
-               <div class="card-body row">
-                  <div class="col-sm-6">
-                     <h2 class="box-title">Users List </h2>
+            <div class="card-body row">
+                  <div class="col-sm-5">
+                     <h2 class="box-title">Users </h2>
                   </div>
-                 
+                  <div class="col-sm-7 d-flex justify-content-end">
+                  <form class="form-inline" method="POST">
+                     <input type="text" class="form-control" name="text" placeholder="Search by email" value="<?php  echo $text; ?>">
+                     <button type="submit" class="btn btn-danger" name="search">
+                        <i class="fa fa-search"></i>
+                     </button>
+                  </form>
+
+                  </div>
                </div>
                <div class="card-body--">
                   <div class="table-stats order-table ov-h">
@@ -55,7 +84,7 @@
                         </tbody>
                      </table>
                   </div>
-                  <?php if($nr_of_rows >=$rows_per_page){
+                  <?php if($nr_of_rows >$rows_per_page){
                   ?> 
                      <div class=" container">
                      showing 1 of <?php echo $pages?>

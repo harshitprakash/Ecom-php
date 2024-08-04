@@ -26,10 +26,19 @@
                      mysqli_query($con,$delete_sql);
                   }
             }
-            $start=0;
-            $rows_per_page=10;
-            $record ="SELECT * FROM categories";
-            $result = $con->query($record);
+
+           
+$text="";
+$start=0;
+$rows_per_page=10;
+$record ="SELECT * FROM categories";
+$result = $con->query($record);
+        if(isset($_POST['search'])){
+            $text=get_safe_value($con,$_POST['text']);
+
+         
+            $search_text = '%' . $text . '%';
+         
             if ($result->num_rows > 0) {
                // Output number of rows
                $nr_of_rows = $result->num_rows;
@@ -39,17 +48,24 @@
                $page=$_GET['page-nr']-1;
                $start = $page*$rows_per_page;
             }
-            $sql="select * FROM categories LIMIT $start,$rows_per_page";
+            $sql = "SELECT * FROM categories WHERE categories LIKE '$search_text' LIMIT $start,$rows_per_page";
             $res=mysqli_query($con,$sql);
-
-        if(isset($_POST['search'])){
-         $text=get_safe_value($con,$_POST['text']);
-         $search_text = '%' . $text . '%';
-         $sql = "SELECT categories FROM categories WHERE categories LIKE '$search_text'";
-         $query=mysqli_query($con,$sql);
-         while ($data = mysqli_fetch_assoc($query)) {
-            echo $data['categories'] . "<br>";
-        }         echo $data;         
+      }
+     
+      else{
+        
+         if ($result->num_rows > 0) {
+            // Output number of rows
+            $nr_of_rows = $result->num_rows;
+        }
+         $pages=ceil($nr_of_rows/$rows_per_page);
+         if(isset($_GET['page-nr'])){
+            $page=$_GET['page-nr']-1;
+            $start = $page*$rows_per_page;
+         }
+         $sql="select * FROM categories LIMIT $start,$rows_per_page";
+         $res=mysqli_query($con,$sql);
+      
       }
 
          
@@ -66,7 +82,7 @@
                   </div>
                   <div class="col-sm-7 d-flex justify-content-end">
                   <form class="form-inline" method="POST">
-                     <input type="text" class="form-control" name="text" placeholder="Search">
+                     <input type="text" class="form-control" name="text" placeholder="Search" value="<?php echo $text;?>">
                      <button type="submit" class="btn btn-danger" name="search">
                         <i class="fa fa-search"></i>
                      </button>
@@ -118,7 +134,12 @@
                         </tbody>
                      </table>
                   </div>
-                 <?php if($nr_of_rows >=$rows_per_page){
+                 <?php 
+                 if(isset($_POST['search']) && $_POST != ''){
+                  //
+                 }
+                 else{
+            if($nr_of_rows >$rows_per_page){
                   ?> 
                <div class=" container">
                  showing 1 of <?php echo $pages?>
@@ -156,7 +177,7 @@
                      </ul>
                   </nav>
                </div>
-                  <?php }?>
+                  <?php }}?>
                </div>
             </div>
          </div>

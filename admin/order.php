@@ -3,52 +3,81 @@
     require('admin_auth.php');
 
     auth();
-
-   if(isset($_GET['type'])&& $_GET['type'] != '')
-   {
-         $type=get_safe_value($con,$_GET['type']);
-         if($type =='status'){
-            $operation= get_safe_value($con,$_GET['operation']);
-            $id = get_safe_value($con,$_GET['id']);
-            if($operation=='active'){
-               $status='1';
-            }
-            else{
-               $status='0';
-            }
-            $update_status_sql="UPDATE product set status='$status' where id='$id' ";
-            mysqli_query($con,$update_status_sql);
-         }
-
-         if($type =='delete'){
-            $id = get_safe_value($con,$_GET['id']);
-            $delete_sql="DELETE from product WHERE id='$id' ";
-            mysqli_query($con,$delete_sql);
-         }
-   }
    $text="";
    $start=0;
    $rows_per_page=10;
-   $record ="SELECT * FROM product";
-   $result = $con->query($record);
-   if(isset($_POST['search'])){
+   if(isset($_GET['order_status'])){
+    if($_GET['order_status']=='shipped'){
+        $status='shipped';
+    }
+    if($_GET['order_status']=='delivered'){
+        $status='delivered';
+    }
+        $order_id=$_GET['order_id'];
+        $sql="UPDATE `order` SET order_status = '$status' WHERE id=$order_id";
+        $req=mysqli_query($con,$sql);
+        $msg= "Status has been updated to $status";
+    }
+   if(isset($_POST['text']) && $_POST['text'] != ''){
       $text=get_safe_value($con,$_POST['text']);
 
       $search_text = '%' . $text . '%';
+      
+
+      $record ="SELECT 
+               `order`.*, 
+               admin_users.username, 
+               product.name
+            FROM 
+               `order`
+            JOIN 
+               admin_users ON `order`.user_id = admin_users.id
+            JOIN 
+               order_details ON `order`.id = order_details.order_id
+            JOIN 
+               product ON order_details.product_id = product.id
+            WHERE 
+               admin_users.username LIKE '$search_text'OR order.order_status LIKE '$search_text' OR order.payment_status LIKE '$search_text'";
+      $result = $con->query($record);
       if ($result->num_rows > 0) {
          // Output number of rows
          $nr_of_rows = $result->num_rows;
-     }
+         echo $nr_of_rows;
+
+      }
       $pages=ceil($nr_of_rows/$rows_per_page);
       if(isset($_GET['page-nr'])){
          $page=$_GET['page-nr']-1;
          $start = $page*$rows_per_page;
       }
-      $sql = "SELECT product.*, categories.categories FROM product JOIN categories ON product.categories_id = categories.id WHERE product.name LIKE '$search_text' OR categories.categories LIKE '$search_text' ORDER BY product.id desc LIMIT $start,$rows_per_page";
-      $res=mysqli_query($con,$sql);
-   }
 
+      $sql="SELECT 
+      `order`.*, 
+      admin_users.username, 
+      product.name
+   FROM 
+      `order`
+   JOIN 
+      admin_users ON `order`.user_id = admin_users.id
+   JOIN 
+      order_details ON `order`.id = order_details.order_id
+   JOIN 
+      product ON order_details.product_id = product.id
+   WHERE 
+      admin_users.username LIKE '$search_text'OR order.order_status LIKE '$search_text' OR order.payment_status LIKE '$search_text'
+      LIMIT $start,$rows_per_page";
+
+      // $res=mysqli_query($con,$sql);
+
+
+      $res=mysqli_query($con,$sql);
+      
+     
+   }
 else{
+   
+   $record ="SELECT * FROM `order`";
+   $result = $con->query($record);
    
    if ($result->num_rows > 0) {
       // Output number of rows
@@ -59,8 +88,22 @@ else{
       $page=$_GET['page-nr']-1;
       $start = $page*$rows_per_page;
    }
-   $sql="SELECT product.*,categories.categories FROM product,categories where product.categories_id = categories.id ORDER BY product.id desc LIMIT $start,$rows_per_page";
-   $res=mysqli_query($con,$sql);
+                $id=$_SESSION['id'];
+                $sql="SELECT 
+                        `order`.*, 
+                        admin_users.username, 
+                        product.name
+                     FROM 
+                        `order`
+                     JOIN 
+                        admin_users ON `order`.user_id = admin_users.id
+                     JOIN 
+                        order_details ON `order`.id = order_details.order_id
+                     JOIN 
+                        product ON order_details.product_id = product.id LIMIT $start,$rows_per_page";
+                        $res=mysqli_query($con,$sql);
+
+                       
 }
 
 
@@ -73,7 +116,7 @@ else{
             <div class="card ">
                <div class="card-body row">
                   <div class="col-sm-3">
-                     <h2 class="box-title">Product </h2>
+                     <h2 class="box-title">All Orders </h2>
                   </div>
                   <div class="col-sm-7 d-flex justify-content-end">
                   <form class="form-inline" method="POST">
@@ -93,45 +136,42 @@ else{
                      <table class="table">
                         <thead>
                            <tr>
-                              <th class="text-center">Id</th>
-                              <th class="text-center">Categories</th>
-                              <th class="text-center">Name</th>
-                              <th class="text-center">Image</th>
-                              <th class="text-center">MRP</th>
-                              <th class="text-center">PRice</th>
-                              <th class="text-center">Quantity</th>
-                              <th class="text-center">Status</th>
+                              <th class="text-center">Order Id</th>
+                              <th class="text-center">User Name</th>
+                                  <th class="text-center">Address</th>
+                              <th class="text-center">City</th>
+                              <th class="text-center">pincode</th>
+                              <th class="text-center">Payment type</th>
+                              <th class="text-center">Total Price</th>
+                              <th class="text-center">Payment Status</th>
+                              <th class="text-center">Order Status</th>
                               <th class="text-center">Action</th>
+
                            </tr>
                         </thead>
                         <tbody>
                            <?php while($row = mysqli_fetch_assoc($res)){?>
                            <tr>
                               <td class="text-center"><?php echo $row['id']?></td>
-                              <td class="text-center"><?php echo $row['categories']?></td>
-                              <td class="text-center"><?php echo $row['name']?></td>
-                              <td class="text-center"><img src="<?php echo PRODUCT_IMAGE_SITE_PATH.$row['image']?>"></td>
-                              <td class="text-center"><?php echo $row['mrp']?></td>
-                              <td class="text-center"><?php echo $row['price']?></td>
-                              <td class="text-center"><?php echo $row['qty']?></td>
+                              <td class="text-center"><?php echo $row['username']?></td>
+                              <td class="text-center"><?php echo $row['address']?></td>
+                              <td class="text-center"><?php echo $row['city']?></td>
+                              <td class="text-center"><?php echo $row['pincode']?></td>
+                              <td class="text-center"><?php echo $row['payment_type']?></td>
+                              <td class="text-center"><?php echo $row['total_price']?></td>
+                              <td class="text-center"><?php echo $row['payment_status']?></td>
+                              <td class="text-center"><?php echo $row['order_status']?></td>
                               <td class="text-center">
-                              
-                              <?php
-                                    if($row['status'] == 1)
-                                       {
-                                          echo "<a href='?type=status&operation=deactive&id=".$row['id']."' class='btn btn-success'>Active</a>&nbsp;";
-                                       } 
-                                    else
-                                       {
-                                          echo "<a href='?type=status&operation=active&id=".$row['id']."' class='btn btn-warning'>Deactive</a>&nbsp;";
-                                       }
-                              ?>
-                              </td>
-                              <td class="text-center">
-                                 <?php echo "<a href='manage_product.php?id=".$row['id']."' class='btn btn-primary'>Edit</a>";?>
-                                 <a href="#" onclick="return confirmDelete(<?php echo $row['id']; ?>)"class='btn btn-danger'>
-                                       Delete
-                                 </a>       
+                                 <?php $order_id = $row['id'];
+                                 if($row['order_status']=='shipped'){
+                                    echo "<a href='order.php?order_status=delivered&order_id=$order_id' class='btn btn-success'>Delivered</a>";
+                                 }
+                                 if($row['order_status']=='pending'){
+                                    echo "<a href='order.php?order_status=shipped&order_id=$order_id' class='btn btn-warning'>Shipped</a>";
+                                 }
+                                    ?>
+
+                                      
                               </td>
                            </tr>
                            <?php } ?>

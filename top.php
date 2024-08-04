@@ -114,7 +114,9 @@ if(isset($_SESSION['id'])){
                             </div>
                             <div class="col-md-3 col-lg-2 col-sm-4 col-xs-4">
                                 <div class="header__right">
-                                    
+                                                <div class="header__account">
+
+                                                </div>
                                     
                                     <?php if(!empty($admin_login)){?>
                                             <div class="header__account">

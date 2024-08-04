@@ -83,44 +83,43 @@
                                        
                                     </table>
                                 </div>
-                                <?php if($nr_of_rows >=$rows_per_page){?> 
-                                    <div class=" container">
-                                    showing 1 of <?php echo $pages?>
-
-                                        <nav aria-label="Page navigation example">
-                                        <ul class="pagination">
-                                            <li><a class="page-link text-danger" href="?page-nr-1">First page</a></li>
-                                        <?php 
-                                                    if(isset($_GET['page-nr']) && $_GET['page-nr']>1 ){ ?>
-                                            <li class="page-item"><a class="page-link text-danger" href="?page-nr=<?php echo $_GET['page-nr'] - 1 ?>">Previous</a></li>
+                        <?php if($nr_of_rows >$rows_per_page){?> 
+                            <div class=" container" style="margin-top:10px;">
+                                <h5>Page no.<?php if(isset($_GET['page-nr'])){echo $_GET['page-nr'];}else{echo $page=1;}; ?> of <?php echo $pages?></h5>
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination">
+                                        <li><a class="page-link text-danger" href="?page-nr=1">First page</a></li>
+                                    <?php 
+                                            if(isset($_GET['page-nr']) && $_GET['page-nr']>1 ){ ?>
+                                        <li class="page-item"><a class="page-link text-danger" href="?page-nr=<?php echo $_GET['page-nr'] - 1 ?>">Previous</a></li>
+                                        <?php }?>
+                                                <?php for($counter=1;$counter<=$pages; $counter ++){ ?>
+                                        <li class="page-item"><a class="page-link text-danger" href="?page-nr=<?php echo $counter?>"><?php echo $counter?></a></li>
                                                 <?php }?>
-                                                    <?php for($counter=1;$counter<=$pages; $counter ++){ ?>
-                                            <li class="page-item"><a class="page-link text-danger" href="?page-nr=<?php echo $counter?>"><?php echo $counter?></a></li>
-                                                    <?php }?>
-                                                    <?php if (!isset($_GET['page-nr'])) {?>
-                                                    <a class="page-link text-danger" href="?page-nr=2">Next</a>
-                                                    <?php
-                                                    } else {
-                                                    // If 'page-nr' is set
-                                                    $currentPage = $_GET['page-nr'];
+                                                <?php if (!isset($_GET['page-nr'])) {?>
+                                                <!-- <a class="page-link" href="?page-nr=2">Next</a> -->
+                                                <?php
+                                            } else {
+                                                // If 'page-nr' is set
+                                                $currentPage = $_GET['page-nr'];
 
-                                                    if ($currentPage >= $pages) {
-                                                        // If current page is the last page or greater than the last page, show 'NEXT' link disabled or with no link
-                                                        
-                                                    } else {
-                                                        // Otherwise, show 'Next' link pointing to the next page number
-                                                        ?>
-                                                        <li><a class="page-link text-danger" href="?page-nr=<?php echo $currentPage + 1 ?>">Next</a></li>
-                                                        <?php
-                                                    }
-                                                    }
-                                                ?> 
-                                                <li><a class="page-link text-danger" href="?page-nr=<?php echo $pages?>">Last page</a>
-                                                </li>
-                                        </ul>
-                                        </nav>
-                                    </div>
-                                <?php }?>
+                                                if ($currentPage >= $pages) {
+                                                    // If current page is the last page or greater than the last page, show 'NEXT' link disabled or with no link
+                                                    
+                                                } else {
+                                                    // Otherwise, show 'Next' link pointing to the next page number
+                                                    ?>
+                                                    <li><a class="page-link text-danger" href="?page-nr=<?php echo $currentPage + 1 ?>">Next</a></li>
+                                                    <?php
+                                                }
+                                            }
+                                        ?> 
+                                        <li><a class="page-link text-danger" href="?page-nr=<?php echo $pages?>">Last page</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        <?php }?>
                             
                         </div>
                     </div>

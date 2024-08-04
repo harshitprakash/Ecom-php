@@ -11,6 +11,10 @@
     } else {
         echo "Category ID is not set or invalid."; // Handle case where category ID is not provided
     }
+    if(isset($_POST['search'])){
+        $text=get_safe_value($con,$_POST['text']);
+         print_r( $text);
+    }
 ?>
 
 
@@ -21,24 +25,17 @@
             <div class="ht__bradcaump__wrap">
                 <div class="container">
                     <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-xs-12">
                             <div class="bradcaump__inner">
                                 <nav class="bradcaump-inner">
                                   <a class="breadcrumb-item" href="index.html" style="color:white; font-size:25px; font-family:Old Standard TT">Home</a>
                                   <span class="brd-separetor"><i class="zmdi zmdi-chevron-right" style="color:white; font-size:25px;"></i></span>
                                   <span class="breadcrumb-item active" style="color:white; font-size:25px; font-family:Ubuntu;"><?php echo $row['categories']?></span>
+                                  
                                 </nav>
                             </div>
                         </div>
-                        <div class="col-xs-6">
-                            <div class="bradcaump__inner">
-                                <nav class="bradcaump-inner">
-                                  <a class="breadcrumb-item" href="index.html" style="color:white; font-size:25px; font-family:Old Standard TT">Home</a>
-                                  <span class="brd-separetor"><i class="zmdi zmdi-chevron-right" style="color:white; font-size:25px;"></i></span>
-                                  <span class="breadcrumb-item active" style="color:white; font-size:25px; font-family:Ubuntu;"><?php echo $row['categories']?></span>
-                                </nav>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
