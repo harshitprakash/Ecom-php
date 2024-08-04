@@ -119,9 +119,7 @@ if(isset($_SESSION['id'])){
                                                 </div>
                                     
                                     <?php if(!empty($admin_login)){?>
-                                            <div class="header__account">
-                                                <a href="login.php">Profile</a>
-                                            </div>
+                                            
                                             <div class="header__account">
                                                 <a href="admin/logout.php">logout</a>
                                             </div>
